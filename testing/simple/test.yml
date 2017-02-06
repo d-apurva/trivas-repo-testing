@@ -1,0 +1,36 @@
+- name: Confirm the web server up 
+  hosts: localhost
+  gather_facts: no
+  connection: local
+  vars: 
+    host: 0.0.0.0
+    port: 8000
+
+  tasks:
+    - name: Wait for server to start  
+      pause:
+        seconds: 120
+ 
+    - name: Check container status
+      command: docker ps -a
+      register: output
+
+    - debug: var=output.stdout_lines
+
+    - name: Check django logs
+      command: docker logs ansible_django_1
+      register: output 
+
+    - debug: var=output.stdout_lines
+
+    - name: Access the home page
+      uri: 
+        url: "http://{{ host }}:{{ port }}"
+        return_content: yes
+      register: homeout 
+       
+    - name: Assert expected output found
+      assert:
+        that:
+          - "'Jump-start your automation project' in homeout.content"
+
