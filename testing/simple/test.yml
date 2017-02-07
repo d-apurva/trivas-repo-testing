@@ -21,13 +21,7 @@
       command: docker logs ansible_django_1
       register: output 
 
-    - debug: var=output.stdout_lines
-
-    - name: Access the home page
-      uri: 
-        url: "http://{{ host }}:{{ port }}"
-        return_content: yes
-      register: homeout 
+    - debug: var=output.stdout_lines    
        
     - name: Assert expected output found
       assert:
