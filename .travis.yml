@@ -31,7 +31,6 @@ script:
 
 # Run simple web server test
 - cd testing/simple
-- ansible-playbook -i inventory test.yml
 
 # Stop the application
 - cd ../..
